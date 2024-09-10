@@ -1,0 +1,220 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/INGRODEST/DocumentManagment/1.0.0
+info:
+  description: API para gestion de documentos
+  version: "1.0.0"
+  title: Document Manager API
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: documentManager
+    description: Entidad encargada de gestionar y almacenar los documentos de los ciudadanos
+paths:
+  /document/{document_id}:
+    get:
+      tags:
+        - documentManager
+      summary: Obtener un documento por id
+      operationId: getDocumentById
+      description: 'Obtiene un documento por el Id de este'
+      parameters: 
+        - in: query
+          name: idDocument
+          description: Id de documento a obtener
+          required: true
+          schema:
+            type: string
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '400':
+          description: El id enviado no es compatible con el formato requerido
+        '404':
+          description: El documento no se encuentra registrado
+    
+  /document/{user_id}:
+    get:
+      tags:
+        - documentManager
+      summary: Obtener un documento por id de ciudadano
+      operationId: getDocumentsByUser
+      description: 'Obtiene un documento por el Id de este'
+      parameters: 
+        - in: query
+          name: idDocument
+          description: Id de documento a obtener
+          required: true
+          schema:
+            type: string
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '400':
+          description: El id enviado no es compatible con el formato requerido
+        '404':
+          description: El documento no se encuentra registrado
+  /document:
+    post:
+      tags:
+        - documentManager
+      summary: Agrega un documento a un cliente
+      operationId: addDocument
+      description: 'Crea un documento en el DocumentManager'
+      parameters: []
+      responses:
+        '200':
+          description: Documento creado
+        '400':
+          description: Documento enviado invalido
+        '409':
+          description: Ya existe este documento para el cliente
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Document'
+    delete:
+      tags: 
+        - documentManager
+      description: 'Elimina un documento de la carpeta del ciudadano'
+      responses:
+        '200':
+          description: Documento eliminado de forma exitosa
+        '400':
+          description: El id enviado no es compatible con el formato requerido
+        '404':
+          description: El documento no se encuentra registrado
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object 
+              properties:
+                idDocument:
+                  type: string
+                  format: uuid
+                  example: c48aab3a-5001-4caf-90d8-0c0e8796c0c1
+    put:
+      tags:
+        - documentManager
+      summary: Actualiza el documento de un cliente
+      operationId: modifyDocument
+      description: 'Modifica el documento en el DocumentManager'
+      responses:
+        '200':
+          description: Documento actualizado
+        '400':
+          description: Documento enviado invalido
+        '409':
+          description: Na existe este documento para el cliente
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Document'
+  
+components:
+  schemas:
+    Document:
+      type: object
+      required:
+        - id
+        - userId
+        - name
+        - createDate
+        - signEntity
+        - signUser
+        - document
+        - metadata
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+          readOnly: true
+        userId:
+          type: string
+          format: uuid
+          example: 16db4207-4e4f-4bf7-a431-82a2ceed1f2d
+        operatorId:
+          type: string
+          format: uuid
+          example: c48aab3a-5001-4caf-90d8-0c0e8796c0c1
+          writeOnly: true
+        entityId:
+          type: string
+          format: uuid
+          example: c48aab3a-5001-4caf-90d8-0c0e8796c0c1
+          writeOnly: true
+        name:
+          type: string
+          example: Certificado Notas
+        documentType:
+          $ref: '#/components/schemas/TipoDocumento'
+        createDate:
+          type: string
+          format: date-time
+          example: '2024-08-29T09:12:33.001Z'
+          readOnly: true
+        updateDate:
+          type: string
+          format: date-time
+          example: '2024-08-29T09:12:33.001Z'
+          readOnly: true
+        signEntity:
+          type: boolean
+          example: false
+        signUser:
+          type: boolean
+          example: true
+        document:
+          type: string
+          format: Base64
+          example: JVBERi0xLjQKJcfsj6IKNSAwIG9iago8PC9UeXBlL1BhZ2UvUGFyZW50IDMgMCBSL1Jlc291cmNlcyA8PC9YT2JqZWN0PDwvWE1MOlBhcnNlciA8PC9UeXBlL1hPYmplY3QvU3VidHlwZS9JbWFnZS9XaWR0aCAxMDAvSGVpZ2h0IDEwMC9GaWx0ZXIvRmxhdGVEZWNvZGUvQml0c1BlckNvbXBvbmVudCA4L0NvbG9yU3BhY2UvRGV2aWNlUkdCL0xlbmd0aCAxMjAwPj4vWE1MOlBhcnNlciA8PC9UeXBlL1hPYmplY3QvU3VidHlwZS9JbWFnZS9XaWR0aCAxMDAvSGVpZ2h0IDEwMC9GaWx0ZXIvRmxhdGVEZWNvZGUvQml0c1BlckNvbXBvbmVudCA4L0NvbG9yU3BhY2UvRGV2aWNlUkdCL0xlbmd0aCAxMjAwPj4vWE1MOlBhcnNlciA8PC9UeXBlL1hPYmplY3QvU3VidHlwZS9JbWFnZS9XaWR0aCAxMDAvSGVpZ2h0IDEwMC9GaWx0ZXIvRmxhdGVEZWNvZGUvQml0c1BlckNvbXBvbmVudCA4L0NvbG9yU3BhY2UvRGV2aWNlUkdCL0xlbmd0aCAxMjAwPj4vWE1MOlBhcnNlciA8PC9UeXBlL1hPYmplY3QvU3VidHlwZS9JbWFnZS9XaWR0aCAxMDAvSGVpZ2h0IDEwMC9GaWx0ZXIvRmxhdGVEZWNvZGUvQml0c1BlckNvbXBvbmVudCA4L0NvbG9yU3BhY2UvRGV2aWNlUkdCL0xlbmd0aCAxMjAwPj4vWE1MOlBhcnNlciA8PC9UeXBlL1hPYmplY3QvU3VidHlwZS9JbWFnZS9XaWR0aCAxMDAvSGVpZ2h0IDEwMC9GaWx0ZXIvRmxhdGVEZWNvZGUvQml0c1BlckNvbXBvbmVudCA4L0NvbG9yU3BhY2UvRGV2aWNlUkdCL0xlbmd0aCAxMjAwPj4vWE1MOlBhcnNlciA8PC9UeXBlL1hPYmplY3QvU3VidHlwZS9JbWFnZS9XaWR0aCAxMDAvSGVpZ2h0IDEwMC9GaWx0ZXIvRmxhdGVEZWNvZGUvQml0c1BlckNvbXBvbmVudCA4L0NvbG9yU3BhY2UvRGV2aWNlUkdCL0xlbmd0aCAxMjAwPj4vWE1MOlBhcnNlciA8PC9UeXBlL1hPYmplY3QvU3VidHlwZS9JbWFnZS9XaWR0aCAxMDAvSGVpZ2h0IDEwMC9GaWx0ZXIvRmxhdGVEZWNvZGUvQml0c1BlckNvbXBvbmVudCA4L0NvbG9yU3BhY2UvRGV2aWNlUkdCL0xlbmd0aCAxMjAwPj4vWE1MOlBhcnNlciA8PC9UeXBlL1hPYmplY3QvU3VidHlwZS9JbWFnZS9XaWR0aCAxMDAvSGVpZ2h0IDEwMC9GaWx0ZXIvRmxhdGVEZWNvZGUvQml0c1BlckNvbXBvbmVudCA4L0NvbG9yU3BhY2UvRGV2aWNlUkdCL0xlbmd0aCAxMjAwPj4vWE1MOlBhcnNlciA8PC9UeXBlL1hPYmplY3QvU3VidHlwZS9JbWFnZS9XaWR0aCAxMDAvSGVpZ2h0IDEwMC9GaWx0ZXIvRmxhdGVEZWNvZGUvQml0c1BlckNvbXBvbmVudCA4L0NvbG9yU3BhY2UvRGV2aWNlUkdCL0xlbmd0aCAxMjAwPj4vWE1MOlBhcnNlciA8PC9UeXBlL1hPYmplY3QvU3VidHlwZS9JbWFnZS9XaWR0aCAxMDAvSGVpZ2h0IDEwMC9GaWx0ZXIvRmxhdGVEZWNvZGUvQml0c1BlckNvbXBvbmVudCA4L0NvbG9yU3BhY2UvRGV2aWNlUkdCL0xlbmd0aCAxMjAwPj4vWE1MOlBhcnNlciA8PC9UeXBlL1hPYmplY3QvU3VidHlwZS9JbWFnZS9XaWR0aCAxMDAvSGVpZ2h0IDEwMC9GaWx0ZXIvRmxhdGVEZWNvZGUvQml0c1BlckNvbXBvbmVudCA4L0NvbG9yU3BhY2UvRGV2aWNlUkdCL0xlbmd0aCAxMjAwPj4vWE1MOlBhcnNlciA8PC9UeXBlL1hPYmplY3QvU3VidHlwZS9JbWFnZS9XaWR0aCAxMDAvSGVpZ2h0IDEwMC9GaWx0ZXIvRmxhdGVEZWNvZGUvQml0c1BlckNvbXBvbmVudCA4L0NvbG9yU3BhY2UvRGV2aWNlUkdCL0xlbmd0aCAxMjAwPj4vWE1MOlBhcnNlciA8PC9UeXBlL1hPYmplY3QvU3VidHlwZS9JbWFnZS9XaWR0aCAxMDAvSGVpZ2h0IDEwMC9GaWx0ZXIvRmxhdGVEZWNvZGUvQml0c1BlckNvbXBvbmVudCA4L0NvbG9yU3BhY2UvRGV2aWNlUkdCL0xlbmd0aCAxMjAwPj4vWE1MOlBhcnNlciA8PC9UeXBlL1hPYmplY3QvU3VidHlwZS9JbWFnZS9XaWR0aCAxMDAvSGVpZ2h0IDEwMC9GaWx0ZXIvRmxhdGVEZWNvZGUvQml0c1BlckNvbXBvbmVudCA4L0NvbG9yU3BhY2UvRGV2aWNlUkdCL0xlbmd0aCAxMjAwPj4vWE1MOlBhcnNlciA8PC9UeXBlL1hPYmplY3QvU3VidHlwZS9JbWFnZS9XaWR0aCAxMDAvSGVpZ2h0IDEw
+        metadata:
+          type: string
+          format: json
+          example: '{"entity":"Ministerio de Educacion"}'
+          writeOnly: true
+    TipoDocumento:
+      type: string
+      enum:
+        - Registro Matrimonio
+        - Registro union libre
+        - Registro divorcio
+        - Escrituras Inmueble
+        - Diploma - Bachiller
+        - Acta de Grado - Pregrado
+        - Diploma - Pregrado
+        - Acta de Grado - Pregrado
+        - Diploma - Posgrado
+        - Acta de Grado - Posgrado
+        - Registro de voto
+      x-enum-values:
+        - 11
+        - 12
+        - 13
+        - 14
+        - 15
+        - 16
+        - 17
+        - 18
+        - 19
+        - 20
+        - 21
