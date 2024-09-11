@@ -1,0 +1,387 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/INGRODEST/DocumentManagment/1.0.0
+info:
+  description: API para gestion de documentos
+  version: "1.0.0"
+  title: Centralizer API
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: citizen
+    description: Capacidades para la gestion de usuarios
+  - name: entities
+    description: Capacidades para la gestion de entidades
+paths:
+  /citizen:
+    get:
+      tags:
+        - citizen
+      summary: Obtener un usuario por su identificacion por id
+      operationId: getDocumentById
+      description: 'Obtiene un usuario por la Identificacion de este'
+      parameters: 
+        - in: query
+          name: identificationType
+          description: Tipo de identificacion
+          required: true
+          schema:
+            type: integer
+            example: 01
+        - in: query
+          name: identification
+          description: Identificacion del ciudadano
+          required: true
+          schema:
+            type: string
+            example: 10294387573
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Citizen'
+        '400':
+          description: La identificacion o el tipo enviado no es compatible con el formato requerido
+        '404':
+          description: El ciudadano no se encuentra registrado
+    post:
+      tags:
+        - citizen
+      summary: Agrega un ciudadano a la plataforma
+      operationId: addCitizen
+      description: 'Crea un ciudadano en la plataforma'
+      responses:
+        '200':
+          description: Ciudadano creado
+        '400':
+          description: Ciudadano enviado invalido
+        '409':
+          description: Ya existe este Ciudadano
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Citizen'
+  /operator:
+    get:
+      tags:
+        - operator
+      summary: Obtener un usuario por su identificacion por id
+      operationId: getDocumentById
+      description: 'Obtiene un usuario por la Identificacion de este'
+      parameters: 
+        - in: query
+          name: identificationType
+          description: Tipo de identificacion
+          required: true
+          schema:
+            type: integer
+            example: 01
+        - in: query
+          name: identification
+          description: Identificacion del ciudadano
+          required: true
+          schema:
+            type: string
+            example: 10294387573
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Operator'
+        '400':
+          description: La identificacion o el tipo enviado no es compatible con el formato requerido
+        '404':
+          description: El ciudadano no se encuentra registrado
+    post:
+      tags:
+        - operator
+      summary: Agrega un ciudadano a la plataforma
+      operationId: addCitizen
+      description: 'Crea un ciudadano en la plataforma'
+      responses:
+        '200':
+          description: Ciudadano creado
+        '400':
+          description: Ciudadano enviado invalido
+        '409':
+          description: Ya existe este Ciudadano
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Operator'
+    put:
+      tags:
+        - operator
+      summary: Agrega un ciudadano a la plataforma
+      operationId: addCitizen
+      description: 'Crea un ciudadano en la plataforma'
+      responses:
+        '200':
+          description: Ciudadano actualizado
+        '400':
+          description: Ciudadano enviado invalido
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Operator'    
+  /entity:
+    get:
+      tags:
+        - entity
+      summary: Obtener un usuario por su identificacion por id
+      operationId: getDocumentById
+      description: 'Obtiene un usuario por la Identificacion de este'
+      parameters: 
+        - in: query
+          name: identificationType
+          description: Tipo de identificacion
+          required: true
+          schema:
+            type: integer
+            example: 01
+        - in: query
+          name: identification
+          description: Identificacion del ciudadano
+          required: true
+          schema:
+            type: string
+            example: 10294387573
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entity'
+        '400':
+          description: La identificacion o el tipo enviado no es compatible con el formato requerido
+        '404':
+          description: El ciudadano no se encuentra registrado
+    post:
+      tags:
+        - entity
+      summary: Agrega un ciudadano a la plataforma
+      operationId: addCitizen
+      description: 'Crea un ciudadano en la plataforma'
+      responses:
+        '200':
+          description: Ciudadano creado
+        '400':
+          description: Ciudadano enviado invalido
+        '409':
+          description: Ya existe este Ciudadano
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Entity'
+    put:
+      tags:
+        - entity
+      summary: Agrega un ciudadano a la plataforma
+      operationId: addCitizen
+      description: 'Crea un ciudadano en la plataforma'
+      responses:
+        '200':
+          description: Ciudadano actualizado
+        '400':
+          description: Ciudadano enviado invalido
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Entity'
+components:
+  schemas:
+    Citizen:
+      type: object
+      required:
+        - id
+        - identificationType
+        - identification
+        - firstName
+        - lastName
+        - createDate
+        - updateDate
+        - metadata
+        - userSign
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        identificationType:
+          $ref: '#/components/schemas/TipoIdentificacion'
+        identification:
+          type: string
+          minLength: 4
+          maxLength: 20
+          example: 1023456789
+        firstName:
+          type: string
+          example: Carlos Andres
+        lastName:
+          type: string
+          example: Arango Mendoza
+
+        operatorId:
+          type: string
+          format: uuid
+          example: c48aab3a-5001-4caf-90d8-0c0e8796c0c1
+        userSign:
+          type: string
+          format: Base64
+          example: JVBERi0xLjQKJcfsj6IKNSAwIG9iago8PC9UeXBlL1BhZ2UvUGFyZW50IDMgMCBSL1Jlc291cmNlcyA8PC9YT2JqZWN0PDwvWE1MOlBhcnNlciA8PC9UeXBlL1hPYmplY3QvU3VidHlwZS9JbWFnZS9XaWR0aCAxMDAvSGVpZ2h0IDEwMC9GaWx0ZXIvRmxhdGVEZWNvZGUvQml0c1BlckNvbXBvbmVudCA4L0NvbG9yU3BhY2UvRGV2aWNlUkdCL0xlbmd0aCAxMjAwPj4vWE1MOlBhcnNlciA8PC9UeXBlL1hPYmplY3QvU3VidHlwZS9JbWFnZS9XaWR0aCAxMDAvSGVpZ2h0IDEwMC9GaWx0ZXIvRmxhdGVEZWNvZGUvQml0c1BlckNvbXBvbmVudCA4L0NvbG9yU3BhY2UvRGV2aWNlUkdCL0xlbmd0aCAxMjAwPj4vWE1MOlBhcnNlciA8PC9UeXBlL1hPYmplY3QvU3VidHlwZS9JbWFnZS9XaWR0aCAxMDAvSGVpZ2h0IDEwMC9GaWx0ZXIvRmxhdGVEZWNvZGUvQml0c1BlckNvbXBvbmVudCA4L0NvbG9yU3BhY2UvRGV2aWNlUkdCL0xlbmd0aCAxMjAwPj4vWE1MOlBhcnNlciA8PC9UeXBlL1hPYmplY3QvU3VidHlwZS9JbWFnZS9XaWR0aCAxMDAvSGVpZ2h0IDEw
+        createDate:
+          type: string
+          format: date-time
+          example: '2024-08-29T09:12:33.001Z'
+        updateDate:
+          type: string
+          format: date-time
+          example: '2024-08-29T09:12:33.001Z'
+    Operator:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        identificationType:
+          $ref: '#/components/schemas/TipoIdentificacion'
+        identification:
+          type: string
+          minLength: 4
+          maxLength: 20
+          example: 1023456789
+        name:
+          type: string
+          example: Operador Alpha
+        mail:
+          type: string
+          example: operador@operador.com
+        urlRequest:
+          type: string
+          example: www.diariodetolica.com/solicitud
+        urlResponse:
+          type: string
+          example: www.diariodetolica.com/respuesta
+        createDate:
+          type: string
+          format: date-time
+          example: '2024-08-29T09:12:33.001Z'
+        updateDate:
+          type: string
+          format: date-time
+          example: '2024-08-29T09:12:33.001Z'
+    Entity:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        identificationType:
+          $ref: '#/components/schemas/TipoIdentificacion'
+        identification:
+          type: string
+          minLength: 4
+          maxLength: 20
+          example: 10234567893
+        name:
+          type: string
+          example: Ministerio
+        mail:
+          type: string
+          example: ministerio@ministerio.com
+        documentos:
+          type: array
+          items:
+            $ref: '#/components/schemas/TipoDocumento'
+        createDate:
+          type: string
+          format: date-time
+          example: '2024-08-29T09:12:33.001Z'
+        updateDate:
+          type: string
+          format: date-time
+          example: '2024-08-29T09:12:33.001Z'
+    Transaction:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        idIntegracion:
+          type: string
+          format: uuid
+          example: d290f1ee-84h5-4b01-90e6-d701748f0851
+        idUser:
+          type: string
+          format: uuid
+          example: d290f1ee-84h5-4b01-90e6-d701748f0851
+        idOperator:
+          type: string
+          format: uuid
+          example: d290f1ee-84h5-4b01-90e6-d701748f0851
+        tipoDocumento:
+          $ref: '#/components/schemas/TipoIdentificacion'
+    TipoIdentificacion:
+      type: integer
+      enum:
+        - CC
+        - PAS
+        - NIT
+      x-enum-values:
+        - 01
+        - 02
+        - 03
+      x-enum-descriptions:
+        - Cedula ciudadania
+        - Passaporte
+        - Nit
+    TipoDocumento:
+      type: string
+      enum:
+        - Registro Matrimonio
+        - Registro union libre
+        - Registro divorcio
+        - Escrituras Inmueble
+        - Diploma - Bachiller
+        - Acta de Grado - Pregrado
+        - Diploma - Pregrado
+        - Acta de Grado - Pregrado
+        - Diploma - Posgrado
+        - Acta de Grado - Posgrado
+        - Registro de voto
+      x-enum-values:
+        - 11
+        - 12
+        - 13
+        - 14
+        - 15
+        - 16
+        - 17
+        - 18
+        - 19
+        - 20
+        - 21
