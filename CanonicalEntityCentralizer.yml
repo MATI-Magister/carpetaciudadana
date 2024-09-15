@@ -15,7 +15,7 @@ info:
 tags:
   - name: citizen
     description: Capacidades para la gestion de usuarios
-  - name: entities
+  - name: entity
     description: Capacidades para la gestion de entidades
 paths:
   /citizen:
@@ -52,6 +52,24 @@ paths:
         '404':
           description: El ciudadano no se encuentra registrado
     post:
+      tags:
+        - citizen
+      summary: Agrega un ciudadano a la plataforma
+      operationId: addCitizen
+      description: 'Crea un ciudadano en la plataforma'
+      responses:
+        '200':
+          description: Ciudadano creado
+        '400':
+          description: Ciudadano enviado invalido
+        '409':
+          description: Ya existe este Ciudadano
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Citizen'
+    put:
       tags:
         - citizen
       summary: Agrega un ciudadano a la plataforma
@@ -322,7 +340,8 @@ components:
           type: string
           format: date-time
           example: '2024-08-29T09:12:33.001Z'
-    Transaction:
+    Transaction - Documento:
+      description: Transaccion del usuario
       type: object
       required:
         - id
@@ -335,6 +354,8 @@ components:
           type: string
           format: uuid
           example: d290f1ee-84h5-4b01-90e6-d701748f0851
+        estado:
+          $ref: '#/components/schemas/TipoEstado'
         idUser:
           type: string
           format: uuid
@@ -344,7 +365,35 @@ components:
           format: uuid
           example: d290f1ee-84h5-4b01-90e6-d701748f0851
         tipoDocumento:
-          $ref: '#/components/schemas/TipoIdentificacion'
+          $ref: '#/components/schemas/TipoDocumento'
+    Transaction - Transferencia:
+      description: Transaccion del usuario
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        idIntegracion:
+          type: string
+          format: uuid
+          example: d290f1ee-84h5-4b01-90e6-d701748f0851
+        estado:
+          $ref: '#/components/schemas/TipoEstado'
+        idUser:
+          type: string
+          format: uuid
+          example: d290f1ee-84h5-4b01-90e6-d701748f0860
+        idOperatorOrigen:
+          type: string
+          format: uuid
+          example: d290f1ee-84h5-4b01-90e6-d701748f0851
+        idOperadorDestino:
+          type: string
+          format: uuid
+          example: d290f1ee-84h5-4b01-90e6-d701748f0866
     TipoIdentificacion:
       type: integer
       enum:
@@ -360,7 +409,7 @@ components:
         - Passaporte
         - Nit
     TipoDocumento:
-      type: string
+      type: array
       enum:
         - Registro Matrimonio
         - Registro union libre
@@ -385,3 +434,10 @@ components:
         - 19
         - 20
         - 21
+    TipoEstado:
+      type: array
+      enum:
+        - INICIAL
+        - RECHAZADO
+        - APROBADO
+        - COMPLETADO
