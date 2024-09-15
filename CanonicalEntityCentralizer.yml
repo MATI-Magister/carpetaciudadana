@@ -270,6 +270,8 @@ components:
           type: string
           format: date-time
           example: '2024-08-29T09:12:33.001Z'
+    UserToken:
+      type: object
     Operator:
       type: object
       required:
@@ -292,6 +294,12 @@ components:
         mail:
           type: string
           example: operador@operador.com
+        user:
+          type: string
+          example: OperadorExt
+        password:
+          type: string
+          example: OperatorPass
         urlRequest:
           type: string
           example: www.diariodetolica.com/solicitud
@@ -394,6 +402,13 @@ components:
           type: string
           format: uuid
           example: d290f1ee-84h5-4b01-90e6-d701748f0866
+        values:
+          type: array
+          items:
+            type: object
+            items:
+              - Key
+              - Value
     TipoIdentificacion:
       type: integer
       enum:
