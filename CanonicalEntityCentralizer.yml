@@ -231,9 +231,8 @@ components:
         - identification
         - firstName
         - lastName
-        - createDate
-        - updateDate
         - metadata
+        - tokenUser
         - userSign
       properties:
         id:
@@ -241,7 +240,7 @@ components:
           format: uuid
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
         identificationType:
-          $ref: '#/components/schemas/TipoIdentificacion'
+          $ref: '#/components/schemas/TypeIdentification'
         identification:
           type: string
           minLength: 4
@@ -253,6 +252,9 @@ components:
         lastName:
           type: string
           example: Arango Mendoza
+        tokenUser:
+          type: string
+          example: c48aab3a-5001-4caf-90d8-0c0e87867af
 
         operatorId:
           type: string
@@ -262,16 +264,7 @@ components:
           type: string
           format: Base64
           example: JVBERi0xLjQKJcfsj6IKNSAwIG9iago8PC9UeXBlL1BhZ2UvUGFyZW50IDMgMCBSL1Jlc291cmNlcyA8PC9YT2JqZWN0PDwvWE1MOlBhcnNlciA8PC9UeXBlL1hPYmplY3QvU3VidHlwZS9JbWFnZS9XaWR0aCAxMDAvSGVpZ2h0IDEwMC9GaWx0ZXIvRmxhdGVEZWNvZGUvQml0c1BlckNvbXBvbmVudCA4L0NvbG9yU3BhY2UvRGV2aWNlUkdCL0xlbmd0aCAxMjAwPj4vWE1MOlBhcnNlciA8PC9UeXBlL1hPYmplY3QvU3VidHlwZS9JbWFnZS9XaWR0aCAxMDAvSGVpZ2h0IDEwMC9GaWx0ZXIvRmxhdGVEZWNvZGUvQml0c1BlckNvbXBvbmVudCA4L0NvbG9yU3BhY2UvRGV2aWNlUkdCL0xlbmd0aCAxMjAwPj4vWE1MOlBhcnNlciA8PC9UeXBlL1hPYmplY3QvU3VidHlwZS9JbWFnZS9XaWR0aCAxMDAvSGVpZ2h0IDEwMC9GaWx0ZXIvRmxhdGVEZWNvZGUvQml0c1BlckNvbXBvbmVudCA4L0NvbG9yU3BhY2UvRGV2aWNlUkdCL0xlbmd0aCAxMjAwPj4vWE1MOlBhcnNlciA8PC9UeXBlL1hPYmplY3QvU3VidHlwZS9JbWFnZS9XaWR0aCAxMDAvSGVpZ2h0IDEw
-        createDate:
-          type: string
-          format: date-time
-          example: '2024-08-29T09:12:33.001Z'
-        updateDate:
-          type: string
-          format: date-time
-          example: '2024-08-29T09:12:33.001Z'
-    UserToken:
-      type: object
+
     Operator:
       type: object
       required:
@@ -282,7 +275,7 @@ components:
           format: uuid
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
         identificationType:
-          $ref: '#/components/schemas/TipoIdentificacion'
+          $ref: '#/components/schemas/TypeIdentification'
         identification:
           type: string
           minLength: 4
@@ -306,14 +299,7 @@ components:
         urlResponse:
           type: string
           example: www.diariodetolica.com/respuesta
-        createDate:
-          type: string
-          format: date-time
-          example: '2024-08-29T09:12:33.001Z'
-        updateDate:
-          type: string
-          format: date-time
-          example: '2024-08-29T09:12:33.001Z'
+
     Entity:
       type: object
       required:
@@ -324,7 +310,7 @@ components:
           format: uuid
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
         identificationType:
-          $ref: '#/components/schemas/TipoIdentificacion'
+          $ref: '#/components/schemas/TypeIdentification'
         identification:
           type: string
           minLength: 4
@@ -336,19 +322,12 @@ components:
         mail:
           type: string
           example: ministerio@ministerio.com
-        documentos:
+        documents:
           type: array
           items:
-            $ref: '#/components/schemas/TipoDocumento'
-        createDate:
-          type: string
-          format: date-time
-          example: '2024-08-29T09:12:33.001Z'
-        updateDate:
-          type: string
-          format: date-time
-          example: '2024-08-29T09:12:33.001Z'
-    Transaction - Documento:
+            $ref: '#/components/schemas/TypeDocument'
+
+    Transaction-Document:
       description: Transaccion del usuario
       type: object
       required:
@@ -362,8 +341,8 @@ components:
           type: string
           format: uuid
           example: d290f1ee-84h5-4b01-90e6-d701748f0851
-        estado:
-          $ref: '#/components/schemas/TipoEstado'
+        state:
+          $ref: '#/components/schemas/TypeState'
         idUser:
           type: string
           format: uuid
@@ -372,9 +351,9 @@ components:
           type: string
           format: uuid
           example: d290f1ee-84h5-4b01-90e6-d701748f0851
-        tipoDocumento:
-          $ref: '#/components/schemas/TipoDocumento'
-    Transaction - Transferencia:
+        TypeDocument:
+          $ref: '#/components/schemas/TypeDocument'
+    Transaction-Transfer:
       description: Transaccion del usuario
       type: object
       required:
@@ -389,7 +368,7 @@ components:
           format: uuid
           example: d290f1ee-84h5-4b01-90e6-d701748f0851
         estado:
-          $ref: '#/components/schemas/TipoEstado'
+          $ref: '#/components/schemas/TypeState'
         idUser:
           type: string
           format: uuid
@@ -405,11 +384,15 @@ components:
         values:
           type: array
           items:
-            type: object
-            items:
-              - Key
-              - Value
-    TipoIdentificacion:
+            properties:
+              key:
+                type: string
+                format: uuid
+                example: KEY_USER
+              value:
+                type: string
+                example: d290f1ee-84h5-4b01-90e6-d701748f0866
+    TypeIdentification:
       type: integer
       enum:
         - CC
@@ -423,7 +406,7 @@ components:
         - Cedula ciudadania
         - Passaporte
         - Nit
-    TipoDocumento:
+    TypeDocument:
       type: array
       enum:
         - Registro Matrimonio
@@ -449,7 +432,7 @@ components:
         - 19
         - 20
         - 21
-    TipoEstado:
+    TypeState:
       type: array
       enum:
         - INICIAL
