@@ -393,7 +393,7 @@ components:
                 type: string
                 example: d290f1ee-84h5-4b01-90e6-d701748f0866
     TypeIdentification:
-      type: integer
+      type: string
       enum:
         - CC
         - PAS
